@@ -1,0 +1,29 @@
+<script src="secure-payment-element.js"></script>
+<style>
+  secure-payment-element {
+    --primary: #ff5722;
+    --font: 'Roboto', sans-serif;
+  }
+</style>
+
+<secure-payment-element id="payment" style="--primary: #6a1b9a;"></secure-payment-element>
+
+
+<script>
+   function dummyMakePaymentApi(token) {
+  return new Promise((resolve) => {
+    alert('payment success');
+  });
+}
+
+  const paymentElement = document
+    .getElementById('payment');
+  paymentElement.addEventListener('payment-tokenized', e => {
+    // ONLY token is available
+    this.dummyMakePaymentApi(e.detail.token)
+  });
+  paymentElement.addEventListener('payment-error', e => {
+    console.log('Detail:', e);
+     alert('Payment error');
+  });
+</script>
