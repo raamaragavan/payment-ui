@@ -14,103 +14,140 @@ class SecurePaymentElement extends HTMLElement {
   render() {
     this._shadow.innerHTML = `
 <style>
-        :host {
-          --payment-bg: #fff;
-          --payment-text: #333;
-          --payment-input-bg: #fff;
-          --payment-input-border: #ccc;
-          --payment-input-focus: #4A90E2;
-          --payment-button-bg: #4A90E2;
-          --payment-button-hover: #357ABD;
-          --payment-button-text: #fff;
-          --payment-success-bg: #DFF2BF;
-          --payment-success-text: #4F8A10;
-          --payment-failure-bg: #FFBABA;
-          --payment-failure-text: #D8000C;
-          --payment-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* =====================================================
+   LIGHT THEME (DEFAULT)
+===================================================== */
+:host {
+  --payment-bg: #ffffff;
+  --payment-text: #333333;
+  --payment-input-bg: #ffffff;
+  --payment-input-border: #cccccc;
+  --payment-input-focus: #4A90E2;
+  --payment-button-bg: #4A90E2;
+  --payment-button-hover: #357ABD;
+  --payment-button-text: #ffffff;
+  --payment-success-bg: #DFF2BF;
+  --payment-success-text: #4F8A10;
+  --payment-failure-bg: #FFBABA;
+  --payment-failure-text: #D8000C;
+  --payment-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-          display: block;
-          font-family: var(--payment-font);
-          max-width: 350px;
-          margin: 1rem auto;
-          padding: 1.5rem;
-          border-radius: 12px;
-          background-color: var(--payment-bg);
-          color: var(--payment-text);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-          cursor: default;
-        }
+  display: block;
+  font-family: var(--payment-font);
+  max-width: 350px;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background-color: var(--payment-bg);
+  color: var(--payment-text);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: default;
+}
 
-        h2 {
-          text-align: center;
-          font-size: 1.2rem;
-          margin-bottom: 1rem;
-        }
+/* =====================================================
+   DARK THEME (PASSED VIA ATTRIBUTE)
+   <secure-payment-element theme="dark">
+===================================================== */
+:host([theme="dark"]) {
+  --payment-bg: #0f172a;
+  --payment-text: #e5e7eb;
+  --payment-input-bg: #020617;
+  --payment-input-border: #334155;
+  --payment-input-focus: #60a5fa;
+  --payment-button-bg: #2563eb;
+  --payment-button-hover: #1d4ed8;
+  --payment-button-text: #ffffff;
+  --payment-success-bg: #052e16;
+  --payment-success-text: #86efac;
+  --payment-failure-bg: #450a0a;
+  --payment-failure-text: #f87171;
+display: block;
+  font-family: var(--payment-font);
+  max-width: 350px;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background-color: var(--payment-bg);
+  color: var(--payment-text);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: default;
+}
 
-        input {
-          display: block;
-          width: 100%;
-          padding: 12px 15px;
-          margin-bottom: 12px;
-          border-radius: 8px;
-          border: 1px solid var(--payment-input-border);
-          font-size: 1rem;
-          background-color: var(--payment-input-bg);
-          color: var(--payment-text);
-        }
+/* =====================================================
+   COMMON STYLES (UNCHANGED)
+===================================================== */
+h2 {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
 
-        input:focus {
-          outline: none;
-          border-color: var(--payment-input-focus);
-          box-shadow: 0 0 6px rgba(74,144,226,0.4);
-        }
+input {
+  display: block;
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--payment-input-border);
+  font-size: 1rem;
+  background-color: var(--payment-input-bg);
+  color: var(--payment-text);
+}
 
-        button {
-          width: 100%;
-          padding: 12px;
-          background-color: var(--payment-button-bg);
-          color: var(--payment-button-text);
-          font-size: 1rem;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-        }
+input:focus {
+  outline: none;
+  border-color: var(--payment-input-focus);
+  box-shadow: 0 0 6px rgba(96,165,250,0.4);
+}
 
-        button:hover {
-          background-color: var(--payment-button-hover);
-        }
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--payment-button-bg);
+  color: var(--payment-button-text);
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
-        button:disabled {
-          background-color: #aaa;
-          color: #eee;
-          cursor: not-allowed;
-          opacity: 0.6;
-        }
+button:hover:not(:disabled) {
+  background-color: var(--payment-button-hover);
+}
 
-        #status {
-          margin-top: 12px;
-          padding: 10px;
-          border-radius: 6px;
-          font-size: 0.95rem;
-          text-align: center;
-          opacity: 0;
-          transform: translateY(-5px);
-          transition: all 0.3s ease;
-        }
+button:disabled {
+  background-color: #6b7280;
+  color: #e5e7eb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 
-        .success {
-          background-color: var(--payment-success-bg);
-          color: var(--payment-success-text);
-          opacity: 1;
-          transform: translateY(0);
-        }
+#status {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
 
-        .error {
-          color: var(--payment-failure-text);
-          opacity: 1;
-          transform: translateY(0);
-        }
+.success {
+  background-color: var(--payment-success-bg);
+  color: var(--payment-success-text);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.error {
+  color: var(--payment-failure-text);
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+
       </style>
 
       <form aria-labelledby="payment-title">
